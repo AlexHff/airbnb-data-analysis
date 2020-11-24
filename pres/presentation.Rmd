@@ -1,0 +1,50 @@
+---
+title: "Airbnb Data Analysis"
+author: "Alexander Hoffmann"
+date: "24/11/2020"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## About this project
+
+In a few words, this project is a simple visualization inspired by InsideAirbnb, written in R, built on Shiny framework.
+
+This projects aims at analyzing publicly available information about a city's Airbnb's listings. In doing so, it provides filters and key metrics so you can see how Airbnb listings compare all around the globe.
+
+## Behind this project
+
+The tools are presented simply, and can also be used to answer more complicated questions, such as:
+
+- Which city is the most expensive?
+- How does the bedroom distribution in Sevilla compare to the one in Bordeaux?
+- What's the average price of all listings in Florence compared to Mallorca?
+
+## Features
+
+Features include:
+
+- Selection of multiple cities for in depth analysis
+- Comparison based on multiple features (e.g., price, beds, etc.)
+- Selection of minimum and maximum dates for all listings
+- Various plot types
+- Visualization of listings on a map
+
+## How it works
+
+*Analysis 1*
+
+- Select one or more cities. By default, all available cities are selected
+- Chose a minimum and a maximum listing date
+- Select the feature you want to compare
+- Chose the type of plot you want the data to be displayed on
+
+The graph will be updated automatically every time some input is changed.
+
+*Analysis 2*
+
+Just select a city and the corresponding listings will be displayed on the map.
+

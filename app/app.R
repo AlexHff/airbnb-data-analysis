@@ -3,17 +3,17 @@ library(dplyr)
 library(stringr)
 library(ggplot2)
 library(data.table)
-library(leaflet)
 library(plotly)
+library(leaflet)
 
 # Reading cleansed data
 cities <- c("malaga", "mallorca", "sevilla", "florence", "bordeaux", "bordeaux", "bordeaux", "florence", "florence", "mallorca", "mallorca")
 data_dates <- c("2020-06-30", "2020-09-19", "2020-06-29", "2020-08-31", "2020-09-19", "2020-08-29", "2020-07-25", "2020-07-23", "2020-06-19", "2020-08-28", "2020-06-25")
-features <- c("property_type", "room_type", "accommodates", "bedrooms", "beds", "price", "minimum_nights", "maximum_nights", "availability_30", "price_30", "revenue_30")
+features <- c("room_type", "accommodates", "bedrooms", "beds", "price", "minimum_nights", "maximum_nights", "availability_30", "price_30", "property_type", "revenue_30")
 
 # We are only interested in data between min_date and max_date
-min_date <- '2020-05-01'
-max_date <- '2020-11-01'
+min_date <- '2000-05-01'
+max_date <- '2020-12-01'
 
 files_paths <- c()
 
@@ -64,7 +64,7 @@ ui <- fluidPage(
       selectInput("city", label = "Select a city", toupper(cities)),
     ),
     mainPanel(
-      leafletOutput("map", height = 400, width = "100%"),
+      leafletOutput("map", height = 400, width = "100%")
     ),
   ),
   
@@ -119,6 +119,10 @@ server <- function(input, output) {
           p <- ggplot(curListings, aes(x=revenue_30)) +
             geom_histogram(color="black", fill="white") +
             geom_vline(aes(xintercept=mean(revenue_30)), color="blue", linetype="dashed", size=1)
+        } else if (input$feature == "property_type") {
+          p <- ggplot(curListings, aes(property_type)) + geom_bar()
+        } else if (input$feature == "room_type") {
+          p <- ggplot(curListings, aes(room_type)) + geom_bar()
         } else {
           p <- ggplot()
         }
@@ -176,26 +180,35 @@ server <- function(input, output) {
     })
     ggplotly(p, tooltip = c("text"))
   })
-  
-  selected_city <- reactive({
-    req(input$city)
+
+  city_data <- reactive({
+    listings[toupper(listings$city) %in% input$city,]
   })
-  
-  # Geography concentration goes here
+
+  # Create base map
   output$map <- renderLeaflet({
-    
-    # Create a base map
-    selected_city() %>% 
-      leaflet(data = listings[toupper(listings$city) %in% input$city,]) %>% 
+    input$city  %>% 
+      leaflet(data = city_data()) %>% 
       addProviderTiles(providers$CartoDB.Positron) %>% 
-      # customise viewport to fit
       fitBounds(lng1 = min(listings$longitude), 
                 lat1 = min(listings$latitude), 
                 lng2 = max(listings$longitude), 
-                lat2 = max(listings$latitude)) %>% 
-      addMarkers(~longitude, ~latitude)
+                lat2 = max(listings$latitude))
+  })
+
+  # Update map
+  observeEvent(input$city, {
+    leafletProxy("map", data = city_data()) %>% 
+      clearMarkers() %>% 
+      addCircleMarkers(lng = ~longitude, 
+                       lat = ~latitude, 
+                       color = 'red', 
+                       radius = 5, 
+                       stroke = FALSE, 
+                       fillOpacity = 0.5)
   })
 }
 
 # Run the app ----
 shinyApp(ui = ui, server = server)
+
