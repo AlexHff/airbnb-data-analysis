@@ -48,6 +48,7 @@ ui <- fluidPage(
         label=("Select the cities you would like to compare"),
         choices = c(toupper(unique(cities)))
       ),
+      dateRangeInput("dates", label = "Select a date range"),
       selectInput("feature", label = "Select a feature", features),
       selectInput("plot_type", label = "Select a plot type", c("histogram", "boxplot"))
     ),
@@ -79,6 +80,9 @@ server <- function(input, output) {
         curListings <- listings[toupper(listings$city) %in% input$cities,]
       else
         curListings <- listings
+      curListings <- filter(curListings, data_date >= input$dates[1])
+      curListings <- filter(curListings, data_date <= input$dates[2])
+      print(dim(curListings))
       if (input$plot_type == "histogram") {
         if (input$feature == "bedrooms") {
           p <- ggplot(curListings, aes(x=bedrooms)) +
@@ -176,7 +180,6 @@ server <- function(input, output) {
   
   selected_city <- reactive({
     req(input$city)
-    # cities[[input$city]]
   })
   
   # Geography concentration goes here
