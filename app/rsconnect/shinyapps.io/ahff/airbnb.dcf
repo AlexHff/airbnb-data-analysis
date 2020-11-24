@@ -1,0 +1,10 @@
+name: airbnb
+title:
+username:
+account: ahff
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3293590
+bundleId: 3899252
+url: https://ahff.shinyapps.io/airbnb/
+when: 1606215898.44559
