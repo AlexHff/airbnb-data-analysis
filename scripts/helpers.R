@@ -3,17 +3,13 @@ library(stringr)
 library(ggplot2)
 library(data.table)
 
-# setwd("~/Dropbox/Data Analytics ECE/Airbnb")
-
 # a generic function to prepare data for a specific city, data_date
 prepare_data <- function(city, data_date)
 {
     # Cleaning listings dataframe
     
-    # suppose raw data is stored in data_raw/city/data_date/listings.csv.gz
-    listings_url <- file.path("data/data_raw", city, data_date, "listings.csv.gz")
-    # suppose raw data is stored in data_raw/city/data_date/calendar.csv.gz
-    calendar_url <- file.path("data/data_raw", city, data_date, "calendar.csv.gz")
+    listings_url <- file.path("../app/data/data_raw", city, data_date, "listings.csv.gz")
+    calendar_url <- file.path("../app/data/data_raw", city, data_date, "calendar.csv.gz")
     
     print(paste0("reading data from ", listings_url))
     listings <- read.csv(gzfile(listings_url))
@@ -86,10 +82,10 @@ prepare_data <- function(city, data_date)
     
     listings_cleansed <- listings %>% left_join(calendar, by = c("id" = "listing_id"))
     
-    dir.create(file.path("data/data_cleansed", city, data_date), recursive = TRUE)
+    dir.create(file.path("../app/data/data_cleansed", city, data_date), recursive = TRUE)
     
-    write.csv(listings_cleansed, file.path("data/data_cleansed", city, data_date, "listings.csv"))
-    print(paste0("saving data into ", file.path("data/data_cleansed", city, data_date, "listings.csv")))
+    write.csv(listings_cleansed, file.path("../app/data/data_cleansed", city, data_date, "listings.csv"))
+    print(paste0("saving data into ", file.path("../app/data/data_cleansed", city, data_date, "listings.csv")))
     
 }
 

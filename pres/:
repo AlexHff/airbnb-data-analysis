@@ -81,24 +81,3 @@ Run the helper script
 Rscript helpers.R
 ```
 
-## Deployment
-
-The `rsconnect` package deploys applications to the shinyapps.io service.
-
-```R
-install.packages('rsconnect')
-```
-
-Run the ‘setAccountInfo’ function from the rsconnect package passing in the token and secret from the Profile / Tokens page.
-
-```R
-library(rsconnect)
-rsconnect::setAccountInfo(name="<ACCOUNT>", token="<TOKEN>", secret="<SECRET>")
-```
-
-To deploy your application, use the deployApp command from the rsconnect packages.
-
-```R
-deployApp()
-```
-
