@@ -1,7 +1,7 @@
 library(shiny)
+library(shinythemes)
 library(dplyr)
 library(stringr)
-library(ggplot2)
 library(data.table)
 library(plotly)
 library(leaflet)
@@ -39,6 +39,8 @@ listings$price <- as.numeric(gsub("$", "", listings$price, fixed = TRUE))
 
 # Define UI ----
 ui <- fluidPage(
+  theme = shinythemes::shinytheme("superhero"),
+
   titlePanel("Analysis 1"),
   
   sidebarLayout(
@@ -67,6 +69,8 @@ ui <- fluidPage(
       leafletOutput("map", height = 400, width = "100%")
     ),
   ),
+  br(),
+  verbatimTextOutput("summary"),
   
   hr(),
   span(icon("github"), a("View source code on GitHub", href = "https://github.com/alexhff/airbnb-data-analysis"))
@@ -206,6 +210,10 @@ server <- function(input, output) {
                        radius = 5, 
                        stroke = FALSE, 
                        fillOpacity = 0.5)
+  })
+
+  output$summary <- renderPrint({
+    summary(city_data())
   })
 }
 
