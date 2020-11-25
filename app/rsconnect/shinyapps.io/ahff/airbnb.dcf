@@ -5,6 +5,6 @@ account: ahff
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3293590
-bundleId: 3899252
+bundleId: 3905581
 url: https://ahff.shinyapps.io/airbnb/
-when: 1606215898.44559
+when: 1606329089.05747
